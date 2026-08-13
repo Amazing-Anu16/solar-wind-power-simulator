@@ -11,7 +11,7 @@ const allowedOrigins = process.env.CLIENT_ORIGIN
   : undefined;
 
 app.use(cors({
-  origin: allowedOrigins ?? true,
+  origin: allowedOrigins ?? false,
 }));
 
 app.use(express.json());

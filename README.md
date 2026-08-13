@@ -70,39 +70,44 @@ Then open your browser to **http://localhost:5173**
 
 ## 🚢 Vercel Deployment
 
-This project is ready to deploy as a single Vercel project.
+This repository is structured for two separate Vercel projects:
+- `frontend/` for the React app
+- `backend/` for the Express API
 
-### Recommended setup
+### Deployment flow
 
-1. Import the repository into Vercel.
-2. Keep the project root at the repository root.
-3. Use the existing build script from the root `package.json`.
-4. Keep the output directory as `frontend/dist`.
-5. Deploy the project.
+1. Create one Vercel project for `frontend/`.
+2. Create a second Vercel project for `backend/`.
+3. Set the frontend project root directory to `frontend` and the backend project root directory to `backend`.
+4. Deploy both projects.
+5. Put the backend deployment URL into the frontend project's `VITE_API_BASE_URL` environment variable.
+6. Put the frontend deployment URL into the backend project's `CLIENT_ORIGIN` environment variable.
 
-### Environment variables
+### Required environment variables
 
-Use these in Vercel Project Settings > Environment Variables:
+Frontend project:
 
-| Name | Required | Value | Why |
+| Name | Required | Example | Why |
 | --- | --- | --- | --- |
-| `VITE_API_BASE_URL` | No for single-Vercel deploy | `/api` | Lets the frontend call the same Vercel domain. Set a full backend URL only if the frontend and backend are hosted separately. |
-| `CLIENT_ORIGIN` | No for same-domain deploy | Your frontend origin, such as `https://your-app.vercel.app` | Restricts backend CORS to approved frontend origins if you deploy frontend and backend on different domains. Multiple origins can be comma-separated. |
-| `PORT` | No on Vercel | `3001` locally only | Used only when running the backend directly on your machine. Vercel ignores it for serverless functions. |
+| `VITE_API_BASE_URL` | Yes | `https://your-backend.vercel.app/api` | Tells the frontend where the deployed API lives. |
 
-### Deployment modes
+Backend project:
 
-Single Vercel project:
+| Name | Required | Example | Why |
+| --- | --- | --- | --- |
+| `CLIENT_ORIGIN` | Yes | `https://your-frontend.vercel.app` | Restricts CORS to the deployed frontend. You can separate multiple origins with commas. |
+| `PORT` | No | `3001` | Only used for local development. Vercel ignores it. |
 
-- No extra env vars are required.
-- Leave `VITE_API_BASE_URL` unset or set it to `/api`.
-- Leave `CLIENT_ORIGIN` unset unless you want explicit CORS restriction.
+### Local development
 
-Separate frontend and backend deployments:
+- Frontend uses `frontend/.env.example` with `VITE_API_BASE_URL=http://localhost:3001/api`.
+- Backend uses `backend/.env.example` with `CLIENT_ORIGIN=http://localhost:5173` and `PORT=3001`.
+- Run `npm run dev` from the repo root to start both services together.
 
-- Set `VITE_API_BASE_URL` to the backend URL, for example `https://api.example.com/api`.
-- Set `CLIENT_ORIGIN` on the backend to the frontend URL, for example `https://app.example.com`.
-- Update your backend host and make sure it allows the frontend origin.
+### Vercel config
+
+- Frontend config: [frontend/vercel.json](frontend/vercel.json)
+- Backend config: [backend/vercel.json](backend/vercel.json)
 
 
 
