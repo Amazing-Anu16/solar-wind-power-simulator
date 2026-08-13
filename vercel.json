@@ -5,9 +5,9 @@
             "framework": "vite"
         },
         "backend": {
-                "root": "backend",
-                "runtime": "node",
-                "entrypoint": "src/server.ts"
+            "root": "backend",
+            "framework": "express",
+            "entrypoint": "src/server.ts"
         }
     },
     "rewrites": [
