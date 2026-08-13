@@ -11,8 +11,9 @@ const allowedOrigins = process.env.CLIENT_ORIGIN
   : undefined;
 
 app.use(cors({
-  origin: allowedOrigins || true,
+  origin: allowedOrigins ?? true,
 }));
+
 app.use(express.json());
 
 app.get('/api/health', (_req: Request, res: Response) => {
